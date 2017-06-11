@@ -1,0 +1,36 @@
+.about-text {
+    font-size: 16px;
+}
+
+.checkbox-group {
+    font-size: 18px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.checkbox-input {
+    margin-left: 22px;
+}
+
+.main-title {
+    font-size: 26px;
+}
+
+.status-text {
+    margin: 20px;
+}
+
+.result-block {
+    margin: 12px;
+}
+
+.result-text {
+    margin-top: 8px;
+}
+
+#save_file_button {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    min-width: 200px; 
+}
