@@ -1,3 +1,9 @@
+.main-part {
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid black;
+}
+
 .about-text {
     font-size: 16px;
 }
@@ -21,7 +27,8 @@
 }
 
 .result-block {
-    margin: 12px;
+    margin: 20px;
+    padding: 20px;
 }
 
 .result-text {

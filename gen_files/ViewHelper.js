@@ -1,5 +1,9 @@
 var ViewHelper = function () {
 
+    var disableOpenButton = function (disable) {
+        document.getElementById('load_file_button').disabled = disable;
+    };
+
     var disableSaveButton = function (disable) {
         document.getElementById('save_file_button').disabled = disable;
     };
@@ -44,6 +48,10 @@ var ViewHelper = function () {
         document.getElementById('result_text').innerHTML = result;
     };
 
+    var resetFileInput = function () {
+        document.getElementById('load_file_button').value = null;
+    };
+
     var updateProgress = function (text, isSuccess) {
         var progressText = document.getElementById('progress_text');
         progressText.innerHTML = text;
@@ -57,12 +65,14 @@ var ViewHelper = function () {
     };
 
     return {
+        disableOpenButton: disableOpenButton,
         disableSaveButton: disableSaveButton,
         hideHelperInjects: hideHelperInjects,
         showHelperInjects: showHelperInjects,
         getHelperInjectsStatus: getHelperInjectsStatus,
         hideResults: hideResults,
         showResult: showResult,
+        resetFileInput: resetFileInput,
         updateProgress, updateProgress,
     };
 };

@@ -43,8 +43,9 @@ var JasmineCreator = function () {
         allInjects.forEach(function (inject) {
             if (!inject.isNonMockable) {
                 result += _addTabs(tabLevel);
-                result += inject.name + 'Mock = jasmine.createSpyObj(\'' + inject.name + '\', []);';
-                result += todoComment('add methods');
+                result += inject.name + 'Mock = jasmine.createSpyObj(\'' + inject.name + '\', [';
+                result += inject.methods.join(', ');
+                result += ']);';
                 result += '\n\n';
             }
         });

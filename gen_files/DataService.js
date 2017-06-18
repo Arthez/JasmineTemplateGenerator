@@ -72,10 +72,10 @@ var DataService = function () {
 
         injects.forEach(function (inject) {
             var isNonMockable = result.filter(function (nonMockableInject) {
-                return nonMockableInject.name === inject;
+                return nonMockableInject.name === inject.name;
             }).length > 0;
             if (!isNonMockable) {
-                result.push({name: inject, isNonMockable: false});
+                result.push({isNonMockable: false, name: inject.name, methods: inject.methods});
             }
         });
 

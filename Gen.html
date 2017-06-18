@@ -6,20 +6,22 @@
 	<link href="gen_files/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-	<p1 class="main-title">
-		<strong>Jasmine Test Generator</strong> 
-		<strong class="about-text"><em>@arturr ver 0.2</em></strong>
-	</p1>
+	<div class="main-part">
+		<p1 class="main-title">
+			<strong>Jasmine Test Generator</strong> 
+			<strong class="about-text"><em>@arturr ver 0.2</em></strong>
+		</p1>
 
-	<div class="status-text">
-		<strong>Status: </strong>
-		<span id="progress_text">Initializing...</span>
+		<div class="status-text">
+			<strong>Status: </strong>
+			<span id="progress_text">Initializing...</span>
+		</div>
+
+		<div id="helper_injects"></div>
+
+		<input id="load_file_button" type="file" accept=".js" onclick="onChooseFile()" onchange="openFile(event)" disabled>
+		<button id="save_file_button" onclick="saveFile()" disabled>Save File</button>
 	</div>
-
-	<div id="helper_injects"></div>
-
-	<input type="file" accept=".js" onchange="openFile(event)">
-	<button onclick="saveFile()" id="save_file_button" disabled>Save File</button>
 
 	<div class="result-block">
 		<div><strong id="result_title"></strong></div>
@@ -29,6 +31,7 @@
 	<script type="text/javascript" src="gen_files/ViewHelper.js"></script>
 	<script type="text/javascript" src="gen_files/Finder.js"></script>
 	<script type="text/javascript" src="gen_files/JasmineCreator.js"></script>
+	<script type="text/javascript" src="gen_files/FileService.js"></script>
 	<script type="text/javascript" src="gen_files/DataService.js"></script>
 	<script type="text/javascript" src="gen_files/main.js"></script>
 </body>

@@ -1,0 +1,62 @@
+console.log('STARTED'); // C:\Users\artur\Desktop\Test_input.js
+
+
+NAME \.[a-z\d]{2,}\(
+
+var loadFile = function () {
+	var isPathValid = viewHelper.checkIfSaveButtonIsValid();
+	if (isPathValid) {
+		viewHelper.updateProgress('Loading file...');
+		prepareVariablesForNewFile();
+		var path = viewHelper.getPathFromInput();
+		
+
+		var rawFile = new XMLHttpRequest();
+		rawFile.open("GET", 'file:///' + path, false);
+		rawFile.onreadystatechange = function ()
+		{
+			if(rawFile.readyState === 4)
+			
+			{
+				if(rawFile.status === 200 || rawFile.status == 0)
+				{
+					processFile(rawFile.responseText);
+				}
+			}
+		}
+		rawFile.send(null);
+	} else {
+		viewHelper.updateProgress('Chosen path is INVALID!');
+	}
+};
+
+
+
+<div>
+		<span>Paste path: </span>
+		<input type="text" id="path_input"></input>
+		<button onclick="loadFile()">Load File</button>
+		<button onclick="saveFile()" id="save_file_button" disabled>Save File</button>
+	</div>
+
+
+
+	    var checkIfSaveButtonIsValid = function () {
+        var path = getPathFromInput();
+
+        var isPathForTest = (/^[a-z\d_\.\\:]+\.spec\.js$/).test(path);
+        disableSaveButton(isPathForTest);
+        if (isPathForTest) {
+            return false;
+        }
+
+        var isPathValid = (/^[a-z\d_\.\\:]+\.js$/i).test(path);
+        disableSaveButton(!isPathValid);
+        return isPathValid;
+    };
+
+
+	
+    var getPathFromInput = function () {
+        return document.getElementById('path_input').value;
+    };
