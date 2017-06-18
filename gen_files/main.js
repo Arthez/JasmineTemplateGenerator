@@ -48,7 +48,8 @@ var processFile = function (rawFileData) {
 		viewHelper.disableSaveButton(true);
 	} else {
 		viewHelper.showResult(finalResult);
-		viewHelper.updateProgress('Processing data successfully finished!', true);
+		var newFileName = '' + fileService.getOpenedFileName().replace('.js', '.spec.js');
+		viewHelper.updateProgress('Processing data successfully finished! File' + newFileName + ' is ready to be saved!', true);
 		viewHelper.disableSaveButton(false);
 	}
 };
