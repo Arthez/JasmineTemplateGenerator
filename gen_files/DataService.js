@@ -94,7 +94,7 @@ var DataService = function () {
     var _extractAllElements = function (fileElements, helpers) {
         var allInjects = _classifyInjects(fileElements.injects, helpers);
         allInjects = _removeDuplicatedMethods(allInjects);
-        allInjects = _removeInjectsWithoutMethods(allInjects);
+        allInjects = _removeMockableInjectsWithoutMethods(allInjects);
         allInjects = _sortInjects(allInjects);
         var baseMethods = _sortBaseMethods(fileElements.baseMethods);
 
@@ -125,10 +125,10 @@ var DataService = function () {
         return result;
     };
 
-    var _removeInjectsWithoutMethods = function (allInjects) {
+    var _removeMockableInjectsWithoutMethods = function (allInjects) {
         var result = allInjects.slice();
         result = result.filter(function (inject) {
-            return inject.methods.length > 0;
+            return inject.isNonMockable || inject.methods.length > 0;
         });
         return result;
     };

@@ -1,5 +1,2 @@
 ###### TODOs #####
-- factory FIND adjustments
-
-console.log('STARTED'); // C:\Users\artur\Desktop\Test_input.js
-
+- non mockable injects bug

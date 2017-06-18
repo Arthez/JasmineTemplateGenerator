@@ -14,7 +14,7 @@ var ViewHelper = function () {
 
     var showHelperInjects = function (helpers) {
         var checkboxGroup = '';
-        checkboxGroup += '<div class="checkbox-group"><strong>Non mockable injects to include: </strong>';
+        checkboxGroup += '<div class="checkbox-group"><strong>Non-mockable injects to include: </strong>';
         helpers.forEach(function(helper) {
             checkboxGroup += '<input class="checkbox-input" type="checkbox" id="helper_' + helper + '">' + helper + '</input>';
         });
