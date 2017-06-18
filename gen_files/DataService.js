@@ -93,12 +93,14 @@ var DataService = function () {
 
     var _extractAllElements = function (fileElements, helpers) {
         var allInjects = _classifyInjects(fileElements.injects, helpers);
-        _sortInjects(allInjects);
-        _removeDuplicatedMethods(allInjects);
+        allInjects = _removeDuplicatedMethods(allInjects);
+        allInjects = _removeInjectsWithoutMethods(allInjects);
+        allInjects = _sortInjects(allInjects);
+        var baseMethods = _sortBaseMethods(fileElements.baseMethods);
 
         return {
             allInjects: allInjects,
-            baseMethods: fileElements.baseMethods,
+            baseMethods: baseMethods,
             componentName: fileElements.componentName,
             moduleName: fileElements.moduleName,
             typeOfFile: fileElements.typeOfFile
@@ -116,16 +118,44 @@ var DataService = function () {
     };
 
     var _removeDuplicatedMethods = function (allInjects) {
-        allInjects.forEach(function (inject) {
+        var result = allInjects.slice();
+        result.forEach(function (inject) {
             inject.methods = Array.from(new Set(inject.methods));
         });
+        return result;
+    };
+
+    var _removeInjectsWithoutMethods = function (allInjects) {
+        var result = allInjects.slice();
+        result = result.filter(function (inject) {
+            return inject.methods.length > 0;
+        });
+        return result;
     };
 
     var _sortInjects = function (allInjects) {
-        allInjects.sort(_sortByName);
-        allInjects.forEach(function (inject) {
+        var result = allInjects.slice();
+        result.sort(_sortByName);
+        result.forEach(function (inject) {
             inject.methods.sort();
         });
+        return result;
+    };
+
+    var _sortBaseMethods = function (baseMethods) {
+        var result = baseMethods.slice();
+        var privateMethods = result.filter(function (method) {
+            return method.name[0] === '_';
+        });
+        var publicMethods = result.filter(function (method) {
+            return method.name[0] !== '_';
+        });
+
+        privateMethods.sort(_sortByName);
+        publicMethods.sort(_sortByName);
+        result = publicMethods.concat(privateMethods);
+
+        return result;
     };
 
     return {

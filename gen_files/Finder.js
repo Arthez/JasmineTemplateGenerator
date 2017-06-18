@@ -56,7 +56,13 @@ var Finder = function () {
     };
 
     var _findBaseMethods = function (typeOfFile, fileDataText) {
-        var baseFunctionRegEx = /this\.[_a-z\d\$]{2,}=function\(([a-z]{2,},?([a-z,\d]{2,}))*\)\{/gmi;
+        var baseFunctionRegEx = null;
+        if (typeOfFile === 'factory') {
+            baseFunctionRegEx = /\.prototype\.[_a-z\d\$]{2,}=function\(([a-z]{1,},?([a-z,\d]{1,})?)*\)\{/gmi;
+        } else {
+            baseFunctionRegEx = /this\.[_a-z\d\$]{2,}=function\(([a-z]{1,},?([a-z,\d]{1,})?)*\)\{/gmi;
+        }
+        
         var rawFunctions = [];
         
         var foundFunction;

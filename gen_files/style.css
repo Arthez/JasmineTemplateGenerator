@@ -40,6 +40,8 @@
     margin-top: 8px;
     padding: 10px;
     white-space: pre-wrap;
+    font-family: Consolas, monaco, monospace;
+    font-size: 15px;
 }
 
 #save_file_button {
