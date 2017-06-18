@@ -1,7 +1,7 @@
 var JasmineCreator = function () {
 
-    var describe_P1 = function (tabLevel, descText) {
-        return _addTabs(tabLevel) + 'describe(\'' + descText + '\', function () {\n';
+    var describe_P1 = function (tabLevel, elements) {
+        return _addTabs(tabLevel) + 'describe(\'' + elements.componentName + '\', function () {\n';
     };
 
     var describe_P2 = function (tabLevel) {
@@ -16,11 +16,11 @@ var JasmineCreator = function () {
         return _addTabs(tabLevel) + '});\n\n'
     };
 
-    var variableMocks = function (tabLevel, typeOfFile, allInjects) {
+    var variableMocks = function (tabLevel, elements) {
         var result = _addTabs(tabLevel);
-        result += 'var ' + typeOfFile + ';\n';
+        result += 'var ' + elements.typeOfFile + ';\n';
 
-        allInjects.forEach(function (inject) {
+        elements.allInjects.forEach(function (inject) {
             result += _addTabs(tabLevel);
             if (inject.isNonMockable) {
                 result += 'var ' + inject.name + ';\n';
@@ -33,14 +33,14 @@ var JasmineCreator = function () {
         return result;
     };
 
-    var moduleName = function (tabLevel, moduleName) {
-        return _addTabs(tabLevel) + 'module(\'' + moduleName + '\');\n\n';
+    var moduleName = function (tabLevel, elements) {
+        return _addTabs(tabLevel) + 'module(\'' + elements.moduleName + '\');\n\n';
     };
 
-    var injectMocks = function (tabLevel, allInjects) {
+    var injectMocks = function (tabLevel, elements) {
         var result = '';
         
-        allInjects.forEach(function (inject) {
+        elements.allInjects.forEach(function (inject) {
             if (!inject.isNonMockable) {
                 result += _addTabs(tabLevel);
                 result += inject.name + 'Mock = jasmine.createSpyObj(\'' + inject.name + '\', [';
@@ -53,11 +53,11 @@ var JasmineCreator = function () {
         return result;
     };
 
-    var moduleProvider = function (tabLevel, allInjects) {
+    var moduleProvider = function (tabLevel, elements) {
         var result = _addTabs(tabLevel);
         result += 'module(function ($provide) {\n';
         
-        allInjects.forEach(function (inject) {
+        elements.allInjects.forEach(function (inject) {
             if (!inject.isNonMockable) {
                 result += _addTabs(tabLevel + 1);
                 result += '$provide.value(\'' + inject.name + '\', ' + inject.name + 'Mock);\n';
@@ -69,17 +69,17 @@ var JasmineCreator = function () {
         return result;
     };
 
-    var injectProvider = function (tabLevel, allInjects, componentName, typeOfFile) {
+    var injectProvider = function (tabLevel, elements) {
         var result = _addTabs(tabLevel);
         result += 'inject(function (';
         
-        var nonMockableInjects = allInjects.filter(function (inject) {
+        var nonMockableInjects = elements.allInjects.filter(function (inject) {
             return inject.isNonMockable;
         });
         nonMockableInjects.forEach(function (inject) {
             result += '_' + inject.name + '_, ';
         });
-        result += componentName + ') {\n';
+        result += elements.componentName + ') {\n';
         nonMockableInjects.forEach(function (inject) {
             result += _addTabs(tabLevel + 1);
             result += inject.name + ' = _' + inject.name + '_;\n';
@@ -89,19 +89,27 @@ var JasmineCreator = function () {
         } 
 
         result += _addTabs(tabLevel + 1);
-        result += typeOfFile + ' = ' + componentName + ';\n';
+        result += elements.typeOfFile + ' = ' + elements.componentName + ';\n';
         result += _addTabs(tabLevel);
         result += '});\n';
         
         return result;
     };
 
-    var baseMethodDescribes = function (tabLevel, baseMethods) {
+    var baseMethodDescribes = function (tabLevel, elements) {
         var result = '';
         
-        baseMethods.forEach(function (item) {
+        elements.baseMethods.forEach(function (item) {
             result += _addTabs(tabLevel);
-            result += 'describe(\'' + item.name + '\', function () {\n\n';
+            result += 'describe(\'' + item.name + '\', function () {\n';
+            result += _addTabs(tabLevel + 1);
+            result += todoComment('implement test') + '\n';
+            result += _addTabs(tabLevel + 1);
+            result += 'it(\'should REPLACE_WITH_DESCRIPTION\'), function () {\n';
+            result += _addTabs(tabLevel + 2);
+            result += elements.typeOfFile + '.' + item.name + '();\n';
+            result += _addTabs(tabLevel + 1);
+            result += '});\n';
             result += _addTabs(tabLevel);
             result += '});\n\n';
         });
@@ -118,7 +126,7 @@ var JasmineCreator = function () {
     };
 
     var todoComment = function (comment) {
-        return ' \/\/ TODO: ' + comment;
+        return '\/\/ TODO: ' + comment;
     };
 
     var _addTabs = function (tabLevel) {

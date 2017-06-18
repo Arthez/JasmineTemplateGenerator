@@ -35,7 +35,7 @@ var Finder = function () {
         var fileType = typeRegEx.exec(fileDataText);
         if (fileType && fileType[0]) {
             fileType = fileType[0].replace(/angular\.module\('.{2,}'\)\./gmi, '').replace(/\('/gmi, '');
-            return fileType;
+            return _decodeTypeOfFile(fileType, fileDataText);
         }
 
         return 'TYPE_NOT_SUPPORTED';
@@ -45,14 +45,18 @@ var Finder = function () {
         return fileType === 'controller' || fileType === 'factory' || fileType === 'service';
     };
 
-    var _alphabeticalSort = function (A, B) {
-        var a = A.toLowerCase();
-        var b = B.toLowerCase();
-        return a !== b ? a < b ? -1 : 1 : 0;
+    var _decodeTypeOfFile = function (fileType, fileDataText) {
+        if (fileType === 'component') {
+            var controllerRegEx = /\)\.controller\('/gmi;
+            var isController = controllerRegEx.test(fileDataText);
+            return isController ? 'controller' : 'TYPE_NOT_SUPPORTED';
+        } else {
+            return fileType;
+        }
     };
 
     var _findBaseMethods = function (typeOfFile, fileDataText) {
-        var baseFunctionRegEx = /this\.[_a-z]{2,}=function\(([a-z]{2,},?([a-z,\d]{2,}))*\)\{/gmi;
+        var baseFunctionRegEx = /this\.[_a-z\d\$]{2,}=function\(([a-z]{2,},?([a-z,\d]{2,}))*\)\{/gmi;
         var rawFunctions = [];
         
         var foundFunction;
@@ -62,7 +66,7 @@ var Finder = function () {
         
         var result = [];	
         rawFunctions.forEach(function (item) {
-            var functionNameRegEx = /[_a-z\d]{2,}(?==function)/gmi;
+            var functionNameRegEx = /[_a-z\d\$]{2,}(?==function)/gmi;
             var functionParamsRegEx = /[a-z,\d]{2,}(?=\){)/gmi;
 
             var name = functionNameRegEx.exec(item);
@@ -80,16 +84,17 @@ var Finder = function () {
     };
 
     var _findComponentName = function (typeOfFile, fileDataText) {
-        var componentNameRegEx = /\.service\('[a-z\d]{2,}'/gmi;
+        var typeRegEx = '\\.' + typeOfFile + '\\(';
+        var componentNameRegEx = new RegExp(typeRegEx + '\'[a-z\\d\\$]{2,}', 'gmi');
         var result = componentNameRegEx.exec(fileDataText);
         result = result ? result[0] : '';
-        result = result.replace(/\.service\(/gm, '');
-        result = result.replace(/'/gm, '');
+        result = result.replace(new RegExp(typeRegEx, 'gmi'), '');
+        result = result.replace(/'/gmi, '');
         return result;
     };
 
     var _findInjects = function (typeOfFile, fileDataText) {
-        var injectsRegEx = /,\[('[\$a-z]{2,}'),(function|(('[\$a-z]{2,}'),)*)/gmi;
+        var injectsRegEx = /,\[('[_a-z\d\$]{2,}'),(function|(('[_a-z\d\$]{2,}'),)*)/gmi;
         var result = injectsRegEx.exec(fileDataText);
         result = result ? result[0] : '';
         result = result.replace(/\[*'*/gm, '');
@@ -106,7 +111,8 @@ var Finder = function () {
         
         foundInjectArray.forEach(function (inject) {
             var injectMethods = [];
-            var injectMethodRegEx = new RegExp(inject + '\\.[_a-z\\d]{2,}\\(', 'gmi');
+            var injectName = inject[0] === '$' ? '\\' + inject : inject;
+            var injectMethodRegEx = new RegExp(injectName + '\\.[_a-z\\d\\$]{2,}\\(', 'gmi');
 
             var foundFunction;
             while(foundFunction = injectMethodRegEx.exec(fileDataText)) {
@@ -114,10 +120,8 @@ var Finder = function () {
                 injectMethods.push(foundFunction);
             }
 
-            injectMethods = injectMethods.sort(_alphabeticalSort);
             result.push({name: inject, methods: injectMethods});
         });
-        // result.sort(_alphabeticalSort); // TODO
         return result;
     };
 
@@ -132,6 +136,7 @@ var Finder = function () {
 
     return {
         findAll: findAll,
-        findTypeOfFile: findTypeOfFile
+        findTypeOfFile: findTypeOfFile,
+        isFileTypeSupported: isFileTypeSupported
     }
 };

@@ -14,8 +14,7 @@ var DataService = function () {
     };
 
     var extractFinalResult = function (rawData, helpers) {
-        _processFileData(rawData, helpers);
-        return finalResult;
+        return _processFileData(rawData, helpers);
     };
 
     var getFinalResult = function () {
@@ -29,29 +28,30 @@ var DataService = function () {
         if (fileElements.error) {
             finalResult = fileElements;
         } else {
-            finalResult = _createFinalResult(fileElements, helpers);
+            var allElements = _extractAllElements(fileElements, helpers);
+            finalResult = _createFinalResult(allElements);
         }
+        return finalResult;
     };
 
     var _appendResult = function (text) {
         finalResult += text;
     };
 
-    var _createFinalResult = function (fileElements, helpers) {
+    var _createFinalResult = function (allElements) {
         var result = '';
-        var allInjects = _classifyInjects(fileElements.injects, helpers);
 
         var resultParts = [
-            jasmineCreator.describe_P1(0, fileElements.componentName),
-            jasmineCreator.variableMocks(1, fileElements.typeOfFile, allInjects),
+            jasmineCreator.describe_P1(0, allElements),
+            jasmineCreator.variableMocks(1, allElements),
             jasmineCreator.beforeEach_P1(1),
-            jasmineCreator.moduleName(2, fileElements.moduleName),
-            jasmineCreator.injectMocks(2, allInjects),
-            jasmineCreator.moduleProvider(2, allInjects),
-            jasmineCreator.injectProvider(2, allInjects, fileElements.componentName, fileElements.typeOfFile),
+            jasmineCreator.moduleName(2, allElements),
+            jasmineCreator.injectMocks(2, allElements),
+            jasmineCreator.moduleProvider(2, allElements),
+            jasmineCreator.injectProvider(2, allElements),
             jasmineCreator.beforeEach_P2(1),
-            jasmineCreator.baseMethodDescribes(1, fileElements.baseMethods),
-            jasmineCreator.describe_P2(0, fileElements.baseMethods)
+            jasmineCreator.baseMethodDescribes(1, allElements),
+            jasmineCreator.describe_P2(0)
         ];
 
         resultParts.forEach(function (part) {
@@ -64,26 +64,68 @@ var DataService = function () {
     var _classifyInjects = function (injects, nonMockableInjects) {
         var result = [];
 
+        var helpers = nonMockableInjects.map(function (inject) {
+            return inject.name;
+        });
+
         nonMockableInjects.forEach(function (item) {
             if (item.isChecked) {
-                result.push({name: item.name, isNonMockable: true});
+                result.push({isNonMockable: true, name: item.name, methods: []});
             }
         });
 
+        var nonMockableInResult = result.slice();
+
         injects.forEach(function (inject) {
-            var isNonMockable = result.filter(function (nonMockableInject) {
-                return nonMockableInject.name === inject.name;
+            var isNonMockable = helpers.filter(function (nonMockableInject) {
+                return nonMockableInject === inject.name;
             }).length > 0;
-            if (!isNonMockable) {
-                result.push({isNonMockable: false, name: inject.name, methods: inject.methods});
+            var isAlreadyInResult = nonMockableInResult.filter(function (item) {
+                return item.name === inject.name;
+            }).length > 0;
+            if (!isAlreadyInResult) {
+                result.push({isNonMockable: isNonMockable, name: inject.name, methods: inject.methods});
             }
         });
 
         return result;
     };
 
+    var _extractAllElements = function (fileElements, helpers) {
+        var allInjects = _classifyInjects(fileElements.injects, helpers);
+        _sortInjects(allInjects);
+        _removeDuplicatedMethods(allInjects);
+
+        return {
+            allInjects: allInjects,
+            baseMethods: fileElements.baseMethods,
+            componentName: fileElements.componentName,
+            moduleName: fileElements.moduleName,
+            typeOfFile: fileElements.typeOfFile
+        };
+    };
+
     var _getCleanedData = function () {
         return rawFileData.replace(/\s*\n*\t*/gm, '');
+    };
+
+    var _sortByName = function (A, B) {
+        var a = A.name.toLowerCase();
+        var b = B.name.toLowerCase();
+        return a !== b ? a < b ? -1 : 1 : 0;
+    };
+
+    var _removeDuplicatedMethods = function (allInjects) {
+        allInjects.forEach(function (inject) {
+            inject.methods = Array.from(new Set(inject.methods));
+        });
+    };
+
+    var _sortInjects = function (allInjects) {
+        allInjects.sort(_sortByName);
+        allInjects.forEach(function (inject) {
+            inject.methods.sort();
+        });
     };
 
     return {

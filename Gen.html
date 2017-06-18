@@ -12,20 +12,20 @@
 			<strong class="about-text"><em>@arturr ver 0.2</em></strong>
 		</p1>
 
-		<div class="status-text">
-			<strong>Status: </strong>
-			<span id="progress_text">Initializing...</span>
-		</div>
-
 		<div id="helper_injects"></div>
 
 		<input id="load_file_button" type="file" accept=".js" onclick="onChooseFile()" onchange="openFile(event)" disabled>
 		<button id="save_file_button" onclick="saveFile()" disabled>Save File</button>
 	</div>
 
+	<div class="status-text">
+		<strong>Status: </strong>
+		<span id="progress_text">Initializing...</span>
+	</div>
+
 	<div class="result-block">
 		<div><strong id="result_title"></strong></div>
-		<div class="result-text" id="result_text"></div>
+		<div id="result_text"></div>
 	</div>
 
 	<script type="text/javascript" src="gen_files/ViewHelper.js"></script>

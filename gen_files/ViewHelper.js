@@ -40,12 +40,16 @@ var ViewHelper = function () {
 
     var hideResults = function () {
         document.getElementById('result_title').innerHTML = '';
-        document.getElementById('result_text').innerHTML = '';
+        var resultTextElement = document.getElementById('result_text');
+        resultTextElement.innerHTML = '';
+        resultTextElement.className = '';
     };
 
     var showResult = function (result) {
         document.getElementById('result_title').innerHTML = 'Result: ';
-        document.getElementById('result_text').innerHTML = result;
+        var resultTextElement = document.getElementById('result_text');
+        resultTextElement.innerHTML = result;
+        resultTextElement.className = 'result-text';
     };
 
     var resetFileInput = function () {

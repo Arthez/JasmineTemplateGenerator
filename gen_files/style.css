@@ -23,16 +23,23 @@
 }
 
 .status-text {
+    font-size: 20px;
     margin: 20px;
 }
 
 .result-block {
     margin: 20px;
-    padding: 20px;
+}
+
+#result_title {
+    font-size: 18px;
 }
 
 .result-text {
+    border: 1px solid black;
     margin-top: 8px;
+    padding: 10px;
+    white-space: pre-wrap;
 }
 
 #save_file_button {

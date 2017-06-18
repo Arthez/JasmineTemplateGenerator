@@ -1,8 +1,5 @@
 ###### TODOs #####
-- sorting injects by name
-- controller test
 - factory FIND adjustments
-- base methods DES with TODO and IT?
 
 console.log('STARTED'); // C:\Users\artur\Desktop\Test_input.js
 
