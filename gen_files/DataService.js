@@ -29,36 +29,9 @@ var DataService = function () {
             finalResult = fileElements;
         } else {
             var allElements = _extractAllElements(fileElements, helpers);
-            finalResult = _createFinalResult(allElements);
+            finalResult = jasmineCreator.createTest(allElements);
         }
         return finalResult;
-    };
-
-    var _appendResult = function (text) {
-        finalResult += text;
-    };
-
-    var _createFinalResult = function (allElements) {
-        var result = '';
-
-        var resultParts = [
-            jasmineCreator.describe_P1(0, allElements),
-            jasmineCreator.variableMocks(1, allElements),
-            jasmineCreator.beforeEach_P1(1),
-            jasmineCreator.moduleName(2, allElements),
-            jasmineCreator.injectMocks(2, allElements),
-            jasmineCreator.moduleProvider(2, allElements),
-            jasmineCreator.injectProvider(2, allElements),
-            jasmineCreator.beforeEach_P2(1),
-            jasmineCreator.baseMethodDescribes(1, allElements),
-            jasmineCreator.describe_P2(0)
-        ];
-
-        resultParts.forEach(function (part) {
-            result += part;
-        });
-        
-        return result;
     };
 
     var _classifyInjects = function (injects, nonMockableInjects) {

@@ -118,11 +118,11 @@ var Finder = function () {
         foundInjectArray.forEach(function (inject) {
             var injectMethods = [];
             var injectName = inject[0] === '$' ? '\\' + inject : inject;
-            var injectMethodRegEx = new RegExp(injectName + '\\.[_a-z\\d\\$]{2,}\\(', 'gmi');
+            var injectMethodRegEx = new RegExp(injectName + '\\.[_a-z\\d\\$]{2,}\\(', 'gm');
 
             var foundFunction;
             while(foundFunction = injectMethodRegEx.exec(fileDataText)) {
-                foundFunction = foundFunction[0].replace(/.{2,}\./gmi, '').replace(/\(/, '');
+                foundFunction = foundFunction[0].replace(/.{2,}\./gm, '').replace(/\(/, '');
                 injectMethods.push(foundFunction);
             }
 

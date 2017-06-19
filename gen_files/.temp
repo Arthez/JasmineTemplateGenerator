@@ -1,1 +1,3 @@
 ###### TODOs #####
+- fix controller inject provider
+- add type separation in JasmineCreator
