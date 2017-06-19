@@ -8,6 +8,14 @@ var ViewHelper = function () {
         document.getElementById('save_file_button').disabled = disable;
     };
 
+    var hideGlobalErrors = function () {
+        document.getElementById('global_errors').innerHTML = '';
+    };
+
+    var showGlobalErrors = function (text) {
+        document.getElementById('global_errors').innerHTML = text;
+    };
+
     var hideHelperInjects = function () {
         document.getElementById('helper_injects').innerHTML = '';
     };
@@ -60,7 +68,7 @@ var ViewHelper = function () {
         var progressText = document.getElementById('progress_text');
         progressText.innerHTML = text;
         if (isSuccess === true) {
-            progressText.style.color = 'yellowgreen ';
+            progressText.style.color = '#01bc01';
         } else if (isSuccess === false) {
             progressText.style.color = 'red';
         } else {
@@ -71,6 +79,8 @@ var ViewHelper = function () {
     return {
         disableOpenButton: disableOpenButton,
         disableSaveButton: disableSaveButton,
+        hideGlobalErrors: hideGlobalErrors,
+        showGlobalErrors: showGlobalErrors,
         hideHelperInjects: hideHelperInjects,
         showHelperInjects: showHelperInjects,
         getHelperInjectsStatus: getHelperInjectsStatus,

@@ -27,6 +27,7 @@ var init = function () {
 var prepareVariablesForNewFile = function () {
 	finalResult = '';
 	viewHelper.disableSaveButton(true);
+	viewHelper.hideGlobalErrors();
 	viewHelper.hideResults();
 };
 

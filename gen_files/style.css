@@ -50,3 +50,8 @@
     margin-bottom: 8px;
     min-width: 200px; 
 }
+
+.global-errors {
+    color: red;
+    font-size: 26px;
+}

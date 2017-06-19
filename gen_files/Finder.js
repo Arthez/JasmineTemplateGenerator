@@ -118,7 +118,7 @@ var Finder = function () {
         foundInjectArray.forEach(function (inject) {
             var injectMethods = [];
             var injectName = inject[0] === '$' ? '\\' + inject : inject;
-            var injectMethodRegEx = new RegExp(injectName + '\\.[_a-z\\d\\$]{2,}\\(', 'gm');
+            var injectMethodRegEx = new RegExp(injectName + '\\.[_a-zA-Z\\d\\$]{2,}\\(', 'gm');
 
             var foundFunction;
             while(foundFunction = injectMethodRegEx.exec(fileDataText)) {

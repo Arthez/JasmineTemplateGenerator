@@ -66,9 +66,9 @@ var DataService = function () {
 
     var _extractAllElements = function (fileElements, helpers) {
         var allInjects = _classifyInjects(fileElements.injects, helpers);
+        allInjects = _sortInjects(allInjects);
         allInjects = _removeDuplicatedMethods(allInjects);
         allInjects = _removeMockableInjectsWithoutMethods(allInjects);
-        allInjects = _sortInjects(allInjects);
         var baseMethods = _sortBaseMethods(fileElements.baseMethods);
 
         return {
@@ -108,7 +108,13 @@ var DataService = function () {
 
     var _sortInjects = function (allInjects) {
         var result = allInjects.slice();
+        var beforeSort = JSON.stringify(result);
         result.sort(_sortByName);
+        var afterSort = JSON.stringify(result);
+        // TODO: refactor - access to view not from ViewHelper!
+        if (beforeSort !== afterSort) {
+            document.getElementById('global_errors').innerHTML = 'INJECTS ARE NOT SORTED! but you are THE one who can fix it!';
+        }
         result.forEach(function (inject) {
             inject.methods.sort();
         });
